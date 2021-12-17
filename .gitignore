@@ -1,7 +1,7 @@
 *.iml
 
 local.properties
-
+db.properties
 
 
 # Gradle:
