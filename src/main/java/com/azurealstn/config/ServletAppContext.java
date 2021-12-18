@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -23,10 +24,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.azurealstn.beans.UserBean;
 import com.azurealstn.interceptor.CheckLoginInterceptor;
+import com.azurealstn.interceptor.CheckWriterInterceptor;
 import com.azurealstn.interceptor.TopMenuInterceptor;
 import com.azurealstn.mapper.BoardMapper;
 import com.azurealstn.mapper.TopMenuMapper;
 import com.azurealstn.mapper.UserMapper;
+import com.azurealstn.service.BoardService;
 import com.azurealstn.service.TopMenuService;
 
 /**
@@ -54,6 +57,9 @@ public class ServletAppContext implements WebMvcConfigurer {
 	
 	@Autowired
 	private TopMenuService topMenuService;
+	
+	@Autowired
+	private BoardService boardService;
 	
 	@Resource(name = "loginUserBean")
 	private UserBean loginUserBean;
@@ -128,6 +134,10 @@ public class ServletAppContext implements WebMvcConfigurer {
 		InterceptorRegistration reg2 = registry.addInterceptor(checkLoginInterceptor);
 		reg2.addPathPatterns("/user/modify", "/user/logout", "/board/*");
 		reg2.excludePathPatterns("/board/main");
+		
+		CheckWriterInterceptor checkWriterInterceptor = new CheckWriterInterceptor(loginUserBean, boardService);
+		InterceptorRegistration reg3 = registry.addInterceptor(checkWriterInterceptor);
+		reg3.addPathPatterns("/board/modify", "/board/delete");
 	}
 	
 	@Bean
@@ -140,5 +150,10 @@ public class ServletAppContext implements WebMvcConfigurer {
 		ReloadableResourceBundleMessageSource res = new ReloadableResourceBundleMessageSource();
 		res.setBasenames("/WEB-INF/properties/error_message");
 		return res;
+	}
+	
+	@Bean
+	public StandardServletMultipartResolver multipartResolver() {
+		return new StandardServletMultipartResolver();
 	}
 }

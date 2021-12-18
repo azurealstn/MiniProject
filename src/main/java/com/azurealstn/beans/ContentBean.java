@@ -1,12 +1,26 @@
 package com.azurealstn.beans;
 
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class ContentBean {
 	private int content_idx;
+	
+	@NotBlank
 	private String content_subject;
+	
+	@NotBlank
 	private String content_text;
-	private String content_file;
+	
+	private MultipartFile upload_file; //클라이언트 파일 객체
+	
+	private String content_file; //DB 파일명
 	private int content_writer_idx;
+	private int content_board_idx;
 	private String content_date;
+	
+	private String content_writer_name;
 	
 	public int getContent_idx() {
 		return content_idx;
@@ -43,6 +57,24 @@ public class ContentBean {
 	}
 	public void setContent_date(String content_date) {
 		this.content_date = content_date;
+	}
+	public MultipartFile getUpload_file() {
+		return upload_file;
+	}
+	public void setUpload_file(MultipartFile upload_file) {
+		this.upload_file = upload_file;
+	}
+	public int getContent_board_idx() {
+		return content_board_idx;
+	}
+	public void setContent_board_idx(int content_board_idx) {
+		this.content_board_idx = content_board_idx;
+	}
+	public String getContent_writer_name() {
+		return content_writer_name;
+	}
+	public void setContent_writer_name(String content_writer_name) {
+		this.content_writer_name = content_writer_name;
 	}
 	
 	

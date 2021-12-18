@@ -4,6 +4,6 @@
 <c:set var="root" value="${pageContext.request.contextPath}/" />
 
 <script>
-	alert('게시글 삭제가 완료되었습니다.');
-	location.href = "${root}board/main?board_info_idx=${board_info_idx}";
+	alert('잘못된 접근입니다.');
+	location.href = '${root}main';
 </script>
